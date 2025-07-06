@@ -7,7 +7,7 @@ Your Power BI dashboard presents a comprehensive analysis of eCommerce performan
 - 🗺️ Geographic Insights – sales concentration by region or city
 This dashboard helps stakeholders monitor growth, assess inventory health, and identify revenue drivers at a glance.
 
-
+![SALES_ANALYSIS](IMAGES/SALES_ANALYSIS.png)
 
 🚨 Problems Identified
 - Low Repeat Purchase Rate: A majority of customers purchase only once, showing weak loyalty and retention.
