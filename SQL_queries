@@ -1,0 +1,113 @@
+🧾 Basic Data Exploration
+-- Total number of sales records
+SELECT COUNT(*) AS total_records FROM ecommerce_sales;
+
+Insight: Understand the dataset scale. A large record count may indicate rich data for behavioral segmentation or trend analysis.
+
+-- Date range of the dataset--
+SELECT MIN(order_date) AS start_date, MAX(order_date) AS end_date FROM ecommerce_sales;
+
+Insight: Confirms the time span of sales activity—critical for time-series comparisons, forecasting, and seasonal trends.
+
+💰 Key Sales Metrics
+-- Total revenue--
+SELECT SUM(total_amount) AS total_revenue FROM ecommerce_sales;
+
+Insight: A core metric reflecting overall business performance. Serves as a baseline for evaluating monthly and customer-level contributions.
+-- Average order value
+SELECT AVG(total_amount) AS avg_order_value FROM ecommerce_sales;
+
+Insight: Indicates customer purchasing behavior. A rising average could reflect successful upselling or premium product adoption.
+
+
+-- Top 5 selling products by revenue---
+SELECT product_name, SUM(total_amount) AS revenue
+FROM ecommerce_sales
+GROUP BY product_name
+ORDER BY revenue DESC
+LIMIT 5;
+
+Insight: Identifies high-performing products driving profitability. Useful for inventory focus and targeted marketing.
+
+-- Top 5 products by quantity sold---
+SELECT product_name, SUM(quantity) AS total_quantity
+FROM ecommerce_sales
+GROUP BY product_name
+ORDER BY total_quantity DESC
+LIMIT 5;
+
+Insight: Highlights volume-based bestsellers—often lower-priced or fast-moving items with strong demand.
+
+👥 Customer Insights
+
+-- Count of repeat customers---
+SELECT COUNT(DISTINCT customer_id) AS repeat_customers
+FROM ecommerce_sales
+GROUP BY customer_id
+HAVING COUNT(order_id) > 1;
+
+Insight: Gauges loyalty. A higher ratio of repeat customers suggests strong retention and customer satisfaction.
+
+
+-- Top 5 highest-spending customers--
+SELECT customer_id, SUM(total_amount) AS lifetime_value
+FROM ecommerce_sales
+GROUP BY customer_id
+ORDER BY lifetime_value DESC
+LIMIT 5;
+
+Insight: Identifies VIP customers. Helps tailor personalized offers and loyalty programs to drive retention.
+
+
+📆 Time-based Sales Trends
+
+
+-- Monthly sales trend--
+SELECT DATE_FORMAT(order_date, '%Y-%m') AS month, SUM(total_amount) AS monthly_sales
+FROM ecommerce_sales
+GROUP BY month
+ORDER BY month;
+
+Insight: Tracks business seasonality and performance fluctuations. Can be used to align marketing spend with peak periods.
+
+
+-- Month-over-month growth--
+SELECT 
+  month,
+  monthly_sales,
+  LAG(monthly_sales) OVER (ORDER BY month) AS previous_month_sales,
+  (monthly_sales - LAG(monthly_sales) OVER (ORDER BY month)) AS growth
+FROM (
+  SELECT DATE_FORMAT(order_date, '%Y-%m') AS month, SUM(total_amount) AS monthly_sales
+  FROM ecommerce_sales
+  GROUP BY month
+) AS monthly_data;
+
+Insight: Reveals revenue momentum and trend shifts. Detects downturns or spikes that deserve deeper diagnostic analysis.
+
+📦 Product Performance
+
+-- Sales by product category--
+SELECT category, SUM(total_amount) AS category_sales
+FROM ecommerce_sales
+GROUP BY category
+ORDER BY category_sales DESC;
+
+Insight: Highlights the strongest categories by revenue—enables decisions on product expansion or phase-out.
+
+
+-- Bottom 5 products by sales--
+SELECT product_name, SUM(total_amount) AS product_revenue
+FROM ecommerce_sales
+GROUP BY product_name
+ORDER BY product_revenue ASC
+LIMIT 5;
+
+Insight: Flags underperformers. Valuable for pruning low ROI products or redesigning go-to-market strategy.
+
+
+
+
+
+
+
